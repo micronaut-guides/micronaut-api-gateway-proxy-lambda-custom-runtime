@@ -2,9 +2,8 @@ plugins {
     id "com.github.johnrengelman.shadow" version "5.0.0"
     id "application"
     id "net.ltgt.apt-eclipse" version "0.21"
+    id "groovy"
 }
-
-
 
 version "0.1"
 group "petstoregraal"
@@ -26,7 +25,6 @@ dependencies {
     annotationProcessor "io.micronaut:micronaut-validation"
     compileOnly "com.oracle.substratevm:svm"
     implementation platform("io.micronaut:micronaut-bom:$micronautVersion")
-    implementation "io.micronaut:micronaut-http-client"
     implementation "io.micronaut:micronaut-inject"
     implementation "io.micronaut:micronaut-validation"
     implementation "io.micronaut:micronaut-runtime"
@@ -36,24 +34,25 @@ dependencies {
     implementation("io.micronaut.aws:micronaut-function-aws-api-proxy") {
         exclude group: "com.fasterxml.jackson.module", module: "jackson-module-afterburner"
     }
-    implementation "io.micronaut:micronaut-http-server-netty"
     implementation "javax.annotation:javax.annotation-api"
     runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
+
     testAnnotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
     testAnnotationProcessor "io.micronaut:micronaut-inject-java"
+
     testImplementation platform("io.micronaut:micronaut-bom:$micronautVersion")
-    testImplementation "org.junit.jupiter:junit-jupiter-api"
-    testImplementation "io.micronaut.test:micronaut-test-junit5"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+    testImplementation "io.micronaut:micronaut-http-server-netty"
+    testImplementation "io.micronaut:micronaut-http-client"
+    testImplementation("org.spockframework:spock-core") {
+        exclude group: "org.codehaus.groovy", module: "groovy-all"
+    }
+    testImplementation "io.micronaut:micronaut-inject-groovy"
+    testImplementation "io.micronaut.test:micronaut-test-spock"
 }
 
 test.classpath += configurations.developmentOnly
 
 mainClassName = "petstoregraal.Application"
-// use JUnit 5 platform
-test {
-    useJUnitPlatform()
-}
 
 shadowJar {
     mergeServiceFiles()
