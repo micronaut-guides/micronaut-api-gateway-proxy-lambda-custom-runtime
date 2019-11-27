@@ -1,3 +1,5 @@
 micronaut:
   application:
     name: petstoregraal
+jackson:
+  bean-introspection-module: true
